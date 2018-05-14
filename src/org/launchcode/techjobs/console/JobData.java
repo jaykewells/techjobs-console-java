@@ -62,7 +62,7 @@ public class JobData {
      * with "Enterprise Holdings, Inc".
      *
      * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param value Value of the field to search for
      * @return List of all jobs matching the criteria
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
@@ -74,9 +74,9 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
-
-            if (aValue.contains(value)) {
+            String aValue = row.get(column).toLowerCase();
+            String tempVal = value.toLowerCase();
+            if (aValue.contains(tempVal)) {
                 jobs.add(row);
             }
         }
@@ -84,6 +84,25 @@ public class JobData {
         return jobs;
     }
 
+    public static ArrayList<HashMap<String, String>> findByValue(String keyword){
+
+        // Loads all jobs if they're not already in the system.
+        loadData();
+
+        ArrayList<HashMap<String, String>> results = new ArrayList<>();
+//TODO: Clean up to be case insensitive.
+        for (HashMap<String, String> job: allJobs){
+            for(String column : job.keySet()){
+                String tempCol = job.get(column).toLowerCase();
+                String tempKey = keyword.toLowerCase();
+                if(tempCol.contains(tempKey)){
+                    results.add(job);
+                    break;
+                }
+            }
+        }
+        return results;
+    }
     /**
      * Read in data from a CSV file and store it in a list
      */
